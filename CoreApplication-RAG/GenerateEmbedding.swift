@@ -25,15 +25,12 @@ struct MiniLMEmbedder {
         LogManager.shared.append("✅ Starting embedding for file: \(filePath)")
 
         do {
-            // Load vocab
-//            let vocabPath = "/Users/bismansahni/Documents/bisman-cli/bisman-cli/vocab.txt"
-            
+         
             guard let vocabPath = Bundle.main.path(forResource: "vocab", ofType: "txt") else {
                 LogManager.shared.append("❌ Failed to find vocab.txt in bundle.")
                 return
             }
 
-//            let vocabContent = try String(contentsOfFile: vocabPath, encoding: .utf8)
             let vocabContent = try String(contentsOf: URL(fileURLWithPath: vocabPath.string), encoding: .utf8)
 
             let tokens = vocabContent.split(separator: "\n").map(String.init)
@@ -42,7 +39,7 @@ struct MiniLMEmbedder {
                 vocab[token] = i
             }
 
-            // Tokenize & optionally chunk
+           
             let tokenizer = BertTokenizer(vocab: vocab, merges: nil)
             let tokenList = tokenizer.tokenize(text: inputText).filter { $0 != "[UNK]" }
             let chunkSize = 128
@@ -71,7 +68,7 @@ struct MiniLMEmbedder {
                 let model = try MLModel(contentsOf: modelUrl)
 
 
-                // Predict
+              
                 let inputFeatures = try MLDictionaryFeatureProvider(dictionary: [
                     "input_ids": inputArray,
                     "attention_mask": attentionArray
@@ -87,7 +84,6 @@ struct MiniLMEmbedder {
                     LogManager.shared.append("💾 Inserted chunk \(index) for \(filePath)")
                     
                     
-                 
 
                 }
             }
